@@ -1,0 +1,54 @@
+#:import kivy kivy
+
+<BackgroundColor@Widget>
+    background_color:  1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<GridRenderer@BackgroundColor>:
+    background_color: 0.5, 0.5, 0.5, 1
+    rows: root.gridHeight
+    cols: root.gridWidth
+    spacing: 2
+
+<CellRenderer@ButtonBehavior+Label+BackgroundColor>:
+    on_release: root.handleClick()
+    background_color: root.currentColour
+    text: root.cellString
+    font_size: self.height * 0.8
+
+<UserInterface@BoxLayout>:
+    orientation: 'vertical'
+    GridRenderer:
+        id: worldgrid
+    ControlPanel:
+        id: controlpanel
+
+<ControlPanel@BoxLayout>:
+    orientation: 'horizontal'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Speed: {}'.format(root.simSpeed)
+        Label:
+            text: 'Generation: {}'.format(root.generationCounter)
+        BoxLayout:
+            Label:
+                text: 'Coordinates?'
+            CheckBox:
+                id: coordCheckBox
+    Slider:
+        id: speedSlider
+        value: 1
+    ToggleButton:
+        id: runToggler
+        text: 'Start/\nStop'
+        on_state: root.toggleRunning()
+    Button:
+        text: 'Reset'
+    Button:
+        text: 'Random'
