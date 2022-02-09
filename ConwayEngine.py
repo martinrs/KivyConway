@@ -6,6 +6,9 @@ class World():
     def flip(self, x, y):
         pass
 
+    def randomize(self):
+        pass
+
     def countLiveNeighbours(self, x, y):
         pass
 
