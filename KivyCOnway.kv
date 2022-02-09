@@ -13,34 +13,36 @@
     background_color: 0.5, 0.5, 0.5, 1
     rows: root.gridHeight
     cols: root.gridWidth
-    spacing: 2
+    spacing: 1
 
 <CellRenderer@ButtonBehavior+Label+BackgroundColor>:
     on_release: root.handleClick()
     background_color: root.currentColour
     text: root.cellString
-    font_size: self.height * 0.8
+    font_size: self.height * 0.3
+    size_hint: None, None
+    size: root.cellSize
 
 <UserInterface@BoxLayout>:
-    orientation: 'vertical'
+    orientation: 'horizontal'
     GridRenderer:
         id: worldgrid
     ControlPanel:
         id: controlpanel
+        size_hint: 0.2, 1
 
 <ControlPanel@BoxLayout>:
-    orientation: 'horizontal'
+    orientation: 'vertical'
     BoxLayout:
-        orientation: 'vertical'
+        orientation: 'horizontal'
         Label:
-            text: 'Speed: {}'.format(root.simSpeed)
-        Label:
-            text: 'Generation: {}'.format(root.generationCounter)
-        BoxLayout:
-            Label:
-                text: 'Coordinates?'
-            CheckBox:
-                id: coordCheckBox
+            text: '(x, y)?'
+        CheckBox:
+            id: coordCheckBox    
+    Label:
+        text: 'Generation: {}'.format(root.generationCounter)
+    Label:
+        text: 'Speed: {}'.format(root.simSpeed)
     Slider:
         id: speedSlider
         value: 1
@@ -49,6 +51,8 @@
         text: 'Start/\nStop'
         on_state: root.toggleRunning()
     Button:
-        text: 'Reset'
-    Button:
         text: 'Random'
+        on_release: root.randomize()
+    Button:
+        text: 'Flip'
+        on_release: root.scheduleFlip()

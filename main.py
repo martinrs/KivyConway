@@ -1,3 +1,4 @@
+#import ConwayEngine_done as ConwayEngine
 import ConwayEngine
 
 from kivy.app import App
@@ -9,7 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.lang import Builder
 
-from kivy.properties import NumericProperty, ListProperty, StringProperty
+from kivy.properties import NumericProperty, ListProperty, StringProperty, BooleanProperty
 from kivy.uix.behaviors import ButtonBehavior
 
 class ControlPanel(BoxLayout):
@@ -25,6 +26,12 @@ class ControlPanel(BoxLayout):
     def toggleRunning(self):
         self.running = not self.running
 
+    def scheduleFlip(self):
+        self.parent.ids.worldgrid.flipScheduled = True
+
+    def randomize(self):
+        self.parent.ids.worldgrid.randomScheduled = True
+
 class UserInterface(BoxLayout):
 
     def update(self, world, dt):
@@ -37,37 +44,56 @@ class BackgroundColor(Widget):
 class GridRenderer(GridLayout, BackgroundColor):
     gridHeight = NumericProperty(1)
     gridWidth = NumericProperty(1)
-    CellRenderers = None
+    flipScheduled = BooleanProperty(False)
+    randomScheduled = BooleanProperty(False)
+    cellRenderers = None
 
     def update(self, world):
         dimensions = world.getDimensions()
         self.gridHeight = dimensions[1]
         self.gridWidth = dimensions[0]
 
-        if not self.CellRenderers:
+        if self.randomScheduled:
+            world.randomize()
+            self.randomScheduled = False
+
+        if self.flipScheduled:
+            world.flip()
+            self.flipScheduled = False
+
+        if not self.cellRenderers:
             self.buildCellRenderers(world.grid.cells)
         else:
-            self.updateCellRenderers(world.grid.cells)
+            self.updateCellRenderers(world.grid.cells, world.getDimensions())
 
     def buildCellRenderers(self, cells):
-        self.CellRenderers = {}
+        self.cellRenderers = {}
         for y in range(0, self.gridHeight):
             for x in range(0, self.gridWidth):
                 cell = (x, y)
                 #print('Added', cell)
                 newRenderer = CellRenderer()
                 newRenderer.setCell(cells[cell], cell)
-                self.CellRenderers[cell] = newRenderer
+                self.cellRenderers[cell] = newRenderer
                 self.add_widget(newRenderer)
 
-    def updateCellRenderers(self, cells):
+    def updateCellRenderers(self, cells, dimensions):
+        newSize = self.computeCellSize(dimensions)
         for cell in cells.keys():
+            self.cellRenderers[cell].cellSize = newSize
             if self.parent.ids.controlpanel.ids.coordCheckBox.active:
-                self.CellRenderers[cell].update(cells[cell], cell)
+                self.cellRenderers[cell].update(cells[cell], cell)
             else:
-                self.CellRenderers[cell].update(cells[cell])
+                self.cellRenderers[cell].update(cells[cell])
+
+    def computeCellSize(self, dimensions):
+        size = self.height / dimensions[1]
+        if size * dimensions[0] > self.width:
+            size = (self.width - dimensions[0]-1 * self.spacing[0]) / dimensions[0]
+        return (size, size)
 
 class CellRenderer(ButtonBehavior, Label, BackgroundColor):
+    cellSize = ListProperty((1, 1))
     aliveColour = [1, 1, 1, 1]
     deadColour = [0, 0, 0, 1]
     cellColour = ListProperty(deadColour)
@@ -89,15 +115,13 @@ class CellRenderer(ButtonBehavior, Label, BackgroundColor):
         else:
             self.cellString = ''
 
-    def handleClick(self):
-        self.cell.toggleAlive()
-
 class KivyConwayApp(App):
 
     def build(self):
         self.tickTime = 1
 
-        self.world = ConwayEngine.World(50, 30)
+        #self.world = ConwayEngine.World(25, 15)
+        self.world = ConwayEngine.World(100, 64)
 
         self.gui = UserInterface()
 
