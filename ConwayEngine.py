@@ -1,7 +1,8 @@
 class World():
 
     def __init__(self, width, height):
-        pass
+        self.grid = Grid(width, height)
+        self.generations = 0
 
     def flip(self, x, y):
         pass
@@ -21,7 +22,9 @@ class World():
 class Grid():
 
     def __init__(self, width, height):
-        pass
+        self.height = height
+        self.width = width
+        self.cells = {}
 
     def update(self, newCells):
         pass
@@ -29,7 +32,7 @@ class Grid():
 class Cell:
 
     def __init__(self, alive=False):
-        pass
+        self.isAlive = alive
 
     def toggleAlive(self):
         pass
