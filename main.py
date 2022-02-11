@@ -1,5 +1,5 @@
-#import ConwayEngine_done as ConwayEngine
-import ConwayEngine
+import ConwayEngine_done as ConwayEngine
+#import ConwayEngine
 
 from kivy.app import App
 from kivy.uix.label import Label
@@ -115,13 +115,16 @@ class CellRenderer(ButtonBehavior, Label, BackgroundColor):
         else:
             self.cellString = ''
 
+    def handleClick(self):
+        self.cell.toggleAlive()
+
 class KivyConwayApp(App):
 
     def build(self):
         self.tickTime = 1
 
-        #self.world = ConwayEngine.World(25, 15)
-        self.world = ConwayEngine.World(100, 64)
+        self.world = ConwayEngine.World(25, 15)
+        #self.world = ConwayEngine.World(100, 64)
 
         self.gui = UserInterface()
 
