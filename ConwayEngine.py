@@ -10,6 +10,9 @@ class World():
     def randomize(self):
         pass
 
+    def reset(self):
+        pass
+
     def countLiveNeighbours(self, x, y):
         pass
 
