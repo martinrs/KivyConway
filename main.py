@@ -1,5 +1,5 @@
-import ConwayEngine_done as ConwayEngine
-#import ConwayEngine
+#import ConwayEngine_done as ConwayEngine
+import ConwayEngine
 
 from kivy.app import App
 from kivy.uix.label import Label
@@ -32,6 +32,9 @@ class ControlPanel(BoxLayout):
     def randomize(self):
         self.parent.ids.worldgrid.randomScheduled = True
 
+    def reset(self):
+        self.parent.ids.worldgrid.resetScheduled = True
+
 class UserInterface(BoxLayout):
 
     def update(self, world, dt):
@@ -46,6 +49,7 @@ class GridRenderer(GridLayout, BackgroundColor):
     gridWidth = NumericProperty(1)
     flipScheduled = BooleanProperty(False)
     randomScheduled = BooleanProperty(False)
+    resetScheduled = BooleanProperty(False)
     cellRenderers = None
 
     def update(self, world):
@@ -60,6 +64,10 @@ class GridRenderer(GridLayout, BackgroundColor):
         if self.flipScheduled:
             world.flip()
             self.flipScheduled = False
+
+        if self.resetScheduled:
+            world.reset()
+            self.resetScheduled = False
 
         if not self.cellRenderers:
             self.buildCellRenderers(world.grid.cells)
