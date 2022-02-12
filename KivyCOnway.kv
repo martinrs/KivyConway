@@ -38,13 +38,14 @@
         Label:
             text: '(x, y)?'
         CheckBox:
-            id: coordCheckBox    
+            id: coordCheckBox
     Label:
         text: 'Generation: {}'.format(root.generationCounter)
     Label:
         text: 'Speed: {}'.format(root.simSpeed)
     Slider:
         id: speedSlider
+        min: 1
         value: 1
     ToggleButton:
         id: runToggler
