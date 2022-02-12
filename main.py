@@ -1,4 +1,4 @@
-import ConwayEngine as ConwayEngine
+import ConwayEngine_done as ConwayEngine
 #import ConwayEngine
 
 from kivy.app import App
@@ -126,7 +126,7 @@ class KivyConwayApp(App):
         self.world = ConwayEngine.World(5, 3)
         #self.world = ConwayEngine.World(25, 15)
         #self.world = ConwayEngine.World(50, 30)
-        #self.world = ConwayEngine.World(100, 64)
+        #self.world = ConwayEngine.World(100, 62)
 
         self.gui = UserInterface()
 
