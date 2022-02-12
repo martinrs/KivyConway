@@ -1,4 +1,4 @@
-import ConwayEngine_done as ConwayEngine
+import ConwayEngine as ConwayEngine
 #import ConwayEngine
 
 from kivy.app import App
@@ -123,7 +123,9 @@ class KivyConwayApp(App):
     def build(self):
         self.tickTime = 1
 
-        self.world = ConwayEngine.World(25, 15)
+        self.world = ConwayEngine.World(5, 3)
+        #self.world = ConwayEngine.World(25, 15)
+        #self.world = ConwayEngine.World(50, 30)
         #self.world = ConwayEngine.World(100, 64)
 
         self.gui = UserInterface()
