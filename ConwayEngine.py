@@ -4,7 +4,7 @@ class World():
         self.grid = Grid(width, height)
         self.generations = 0
 
-    def flip(self, x, y):
+    def flip(self):
         pass
 
     def randomize(self):
